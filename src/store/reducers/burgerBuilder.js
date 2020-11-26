@@ -1,10 +1,11 @@
 import * as actionTypes from "../actions/actionTypes";
-import { updateObject } from "../utility";
+import { updateObject } from "../../shared/utility";
 
 const initialState = {
   ingredients: null,
   totalPrice: 4,
   error: false,
+  building: false,
 };
 
 const INGREDIENT_PRICES = {
@@ -22,6 +23,7 @@ const addIngredient = (state, action) => {
   const updatedState = {
     ingredients: updatedIngredients,
     totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ingredientName],
+    building: true,
   };
   return updateObject(state, updatedState);
 };
@@ -34,6 +36,7 @@ const removeIngredient = (state, action) => {
   const updatedSt = {
     ingredients: updatedIngs,
     totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ingredientName],
+    building: true,
   };
   return updateObject(state, updatedSt);
 };
@@ -48,6 +51,7 @@ const setIngredients = (state, action) => {
     },
     totalPrice: 4,
     error: false,
+    building: false,
   });
 };
 
@@ -57,11 +61,16 @@ const fetchIngredientsFailed = (state, action) => {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.ADD_INGREDIENTS: return addIngredient(state, action);
-    case actionTypes.REMOVE_INGREDIENTS: return removeIngredient(state, action);
-    case actionTypes.SET_INGREDIENTS: return setIngredients(state, action);
-    case actionTypes.FETCH_INGREDIENTS_FAILED: return fetchIngredientsFailed(state, action)
-    default: return state;
+    case actionTypes.ADD_INGREDIENTS:
+      return addIngredient(state, action);
+    case actionTypes.REMOVE_INGREDIENTS:
+      return removeIngredient(state, action);
+    case actionTypes.SET_INGREDIENTS:
+      return setIngredients(state, action);
+    case actionTypes.FETCH_INGREDIENTS_FAILED:
+      return fetchIngredientsFailed(state, action);
+    default:
+      return state;
   }
 };
 
